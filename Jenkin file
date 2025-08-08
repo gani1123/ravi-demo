@@ -1,0 +1,22 @@
+pipeline{
+    agent any
+    
+    stages{
+        stage('getcode'){
+            steps{
+                git credentialsId: '16a447d8-d20c-492e-89f2-b5d93422b3e7', url: 'https://github.com/gani1123/ravi-demo.git'
+            }
+        }
+        stage('Build'){
+            steps{
+                sh "mvn clean package"
+            }
+        }
+        stage('Deploy'){
+            steps{
+            deploy adapters: [tomcat9(alternativeDeploymentContext: '', credentialsId: '5cc0ed88-79b7-4912-82d1-b4e088f9a77a', path: '', url: 'http://3.93.199.139:9090/')], contextPath: 'web-app', war: '**/*.war'
+            }
+        }
+        
+    }
+}
